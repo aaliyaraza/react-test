@@ -23,9 +23,9 @@ const styles = {
     alignSelf: 'stretch',
     height: 27,
     width: 245,
-    backgroundColor: '#24A59A',
+    backgroundColor: '#26A69A',
     borderWidth: 1,
-    borderColor: '#24A59A',
+    borderColor: '#26A69A',
   }
 };
 

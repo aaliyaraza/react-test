@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
 export const WhiteButton = ({onPress,style, children})=>{
   console.log("style",style,"onPress",onPress);
   return (
-    <TouchableOpacity style={styles.buttonStyle} onPress={() => onPress}>
+    <TouchableOpacity style={styles.buttonStyle} onPress={onPress}>
       <Text style={styles.textStyle}>
         {children}
       </Text>
@@ -15,7 +15,7 @@ export const WhiteButton = ({onPress,style, children})=>{
 const styles = {
   textStyle: {
     alignSelf: 'center',
-    color: '#24A59A',
+    color: '#26A69A',
     fontSize: 10,
     marginTop: 5.7
   },

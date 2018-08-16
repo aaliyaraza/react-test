@@ -1,41 +1,27 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,Image, Linking} from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import LoginPage from './src/components/LoginPage';
 import DetailsPage from './src/components/DetailsPage';
+import WelcomePage from './src/components/WelcomePage';
+import EmployeeSearch from './src/components/EmployeeSearch';
+import EmployeeProfile from './src/components/EmployeeProfile';
+import StartPage from './src/components/StartPage'
 
-const AppNavigator = StackNavigator({
-  Login: { screen: LoginPage },
-  Details: { screen: DetailsPage }
+const AppNavigator = createStackNavigator({
+  Start: { screen: StartPage, navigationOptions: {headerStyle: {display:"none"}, headerLeft: null}},
+  Login: { screen: LoginPage, navigationOptions: {headerStyle: {display:"none"}, headerLeft: null}},
+  Details: { screen: DetailsPage, navigationOptions: {headerStyle: {display:"none"}, headerLeft: null}},
+  Welcome: { screen: WelcomePage, left: '@BACK', navigationOptions: {headerStyle: {display:"none"}, headerLeft: null} },
+  Search: { screen: EmployeeSearch, left: '@BACK', navigationOptions: {headerStyle: {display:"none"}, headerLeft: null} },
+  Profile: { screen: EmployeeProfile, left: '@BACK', navigationOptions: {headerStyle: {display:"none"}, headerLeft: null} }
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <AppNavigator/>
-      </View>
+      <AppNavigator/>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    //justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#24A59A',
-    paddingLeft: 29,
-    paddingRight: 29, 
-    fontFamily: "ObjektivMk1Rg"
-  }
-});

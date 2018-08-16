@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {Text, View, Image, Linking, TextInput, KeyboardAvoidingView} from 'react-native';
-import Card from './Card';
 import TealButton from './TealButton';
 import {WhiteButton} from './WhiteButton';
+import axios from 'axios';
+
 
 export default class LoginPage extends React.Component {
 
@@ -12,11 +13,13 @@ export default class LoginPage extends React.Component {
           showPass: true,
           press: false,
           email:'',
-          password:''
+          password:'',
+          error:false,
+          errorMessage:''
         };
         this.showPass = this.showPass.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        this.handleClick1 = this.handleClick1.bind(this);
     };
     
     showPass() {
@@ -31,9 +34,24 @@ export default class LoginPage extends React.Component {
             return prevState;
         });
     }
-    handleClick(){
-        console.log("this.props.navation",this.props.navation);
-        this.props.navigation.navigate('Details');
+    handleClick1(){
+        console.log("this.props.navigation",this.props.navigation);
+        // axios.post('http://127.0.0.1:8000/api/v1/authenticate/',{email:this.state.email,password:this.state.password})
+        axios({
+            method:'POST',
+            url:'http://127.0.0.1:8000/api/v1/authenticate/',
+            data:{email:this.state.email,password:this.state.password}
+        }).then(result => {
+            if(result.status == 200 && result.data.status.isSuccess){
+                this.props.navigation.navigate('Details',{employee:result.data.employee,token:result.data.token});                
+            }else{
+                this.setState({error:true,errorMessage:result.data.error});
+            }
+            console.log("result",result);
+        }).catch(error =>{
+            console.log(error);
+            this.setState({error:true,errorMessage:'Something went wrong!'});
+        })
     }
     render () {
 
@@ -41,7 +59,7 @@ export default class LoginPage extends React.Component {
     console.log("this.state",this.state);
     
     return (
-        <Card style={{flex: 1,alignItems:'flex-start'}}>
+        <View style={styles.container}>
             <View style={{alignItems:'flex-start'}}>
                 <Image source={require('./new_panalyt_logo_white.png')} style= {imageStyle}/>
             </View>
@@ -67,12 +85,19 @@ export default class LoginPage extends React.Component {
                     />
                 </View>
             </KeyboardAvoidingView>
+            {this.state.error ? 
+            <View style={{justifyContent: 'flex-start', flexDirection: 'row', marginTop: 36.5}}>
+                <Text style={{color:'red'}}>
+                    {this.state.errorMessage}
+                </Text>
+            </View>:
+            null}
             <View style={{justifyContent: 'flex-start', flexDirection: 'row', marginTop: 36.5}}>
                 <TealButton style={passwordStyle}> Forgot Password </TealButton>
-                <WhiteButton style={loginStyle} onPress={() => console.log("Button Pressed")}> LOGIN </WhiteButton>
+                <WhiteButton style={loginStyle} onPress={() => this.handleClick1()}> LOGIN </WhiteButton>
             </View>
         
-        </Card>
+        </View>
     );
     }
 }
@@ -108,7 +133,14 @@ const styles = {
         alignItems: 'center',
         height: 121,
         width: 240,
-        marginTop: 176,
-        paddingLeft: 39.5
+        marginLeft: 39.5
+    },
+    container:{
+        flex: 1, 
+        paddingLeft: 29, 
+        paddingRight: 29, 
+        justifyContent: 'center',
+        backgroundColor: '#26A69A',
+        color: '#fff'
     }
 };
